@@ -14,3 +14,22 @@ The script shows a simple window that lets you:
 </ul>
 
 The functionalities also include error message popups.
+
+<h2>Requirements</h2>
+The script requires PowerShell interpreter and .NET platform.
+It should run on a reasonably new Windows system without any additional installation.
+It has been tested on Windows 10 with PowerShell version 5.1 and .NET Framework 4.8.1.
+It is not known if it will run on any non-Windows operating system and what packages need to be installed on such systems.
+
+<h2>How to run it?</h2>
+Download the ps1 file.
+
+If your execution policy allows running scripts, you can right click it and click "Run with PowerShell".
+You can also:
+<ol>
+  <li>Open the file in PowerShell ISE (also right click -> "Edit").</li>
+  <li>Select the entire code (Ctrl + A).</li>
+  <li>Click Run Selection.</li>
+</ol>
+
+If run with PowerShell ISE, the script will try reading its configuration file from the current folder and write it there.
