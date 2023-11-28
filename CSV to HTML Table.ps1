@@ -131,7 +131,9 @@ $iniFile = "`.`\CSV to HTML Table.ini"
 
 function Get-SavedDefaults {
     try {
-        $loadedSettings = Get-Content -Path $iniFile | Where-Object {$_ -match '(^Encoding|^Delimiter)'}
+        
+        $validationRegex = [regex]'^[\s]*((?<keyword>Encoding)[\s]*=[\s]*(?<value>(Unicode|UTF7|UTF8|ASCII|UTF32|BigEndianUnicode|Default|OEM))|(?<keyword>Delimiter)[\s]*=[\s]*(?<value>.))[\s]*$'
+        $loadedSettings = Get-Content -Path $iniFile | Where-Object {$_ -match $validationRegex}
     }
     catch {
         [System.Windows.MessageBox]::Show($Error[0], 'Error', 'OK', 'Error')
@@ -139,8 +141,16 @@ function Get-SavedDefaults {
     }
 
     try {
-        $EncodingBox.SelectedIndex = $EncodingBox.Items.IndexOf(($loadedSettings | Where-Object {$_ -match '^Encoding'}).Split(' ')[-1])
-        $DelimiterBox.SelectedIndex = $DelimiterBox.Items.IndexOf(($loadedSettings | Where-Object {$_ -match '^Delimiter'}).Split(' ')[-1])
+        $loadedSettings | ForEach-Object {
+            $_ -match $validationRegex
+            switch($Matches['keyword']) {
+                'Encoding' { $EncodingBox.SelectedIndex = $EncodingBox.Items.IndexOf($Matches['value'])
+                            break }
+                'Delimiter' { $DelimiterBox.Text = $Matches['value']
+                            break}
+            }
+
+        }
     }
     catch {
         [System.Windows.MessageBox]::Show($Error[0], 'Error', 'OK', 'Error')
